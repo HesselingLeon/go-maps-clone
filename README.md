@@ -1,0 +1,1 @@
+```osm2pgsql.exe --user=postgres --database=gisdb  -W -c -s ../antarctica-latest.osm.pbf```
