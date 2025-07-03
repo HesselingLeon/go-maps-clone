@@ -11,20 +11,20 @@ import (
 )
 
 func NewRouter(db *sql.DB) *web.Service {
-	s := web.NewService(openapi31.NewReflector())
+	webservice := web.NewService(openapi31.NewReflector())
 
-	s.OpenAPISchema().SetTitle("Leon Maps")
-	s.OpenAPISchema().SetDescription("This app showcases a Google Maps clone.")
-	s.OpenAPISchema().SetVersion("v0.1")
+	webservice.OpenAPISchema().SetTitle("Leon Maps")
+	webservice.OpenAPISchema().SetDescription("This app showcases a Google Maps clone.")
+	webservice.OpenAPISchema().SetVersion("v0.1")
 
-	s.Wrap(
+	webservice.Wrap(
 		gzip.Middleware,
 	)
 
 	cordinateCalculationUseCase := handler.CoordinateToTileUsecase(db)
-	s.Get("/tile/{x}/{y}/{z}", cordinateCalculationUseCase)
+	webservice.Get("/tile/{z}/{x}/{y}", cordinateCalculationUseCase)
 
-	s.Docs("/docs", swgui.New)
+	webservice.Docs("/docs", swgui.New)
 
-	return s
+	return webservice
 }
